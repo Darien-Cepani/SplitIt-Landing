@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SplitIt - Easy Bill Splitting Web App</title>
+		<link rel="icon" type="image/png" href="media/logo/icon.png" />
+		<meta
+			name="description"
+			content="SplitIt is a free, easy-to-use web app for splitting bills at restaurants, bars, and for groceries. Split bills accurately, calculate totals, and share details easily." />
+
+		<meta
+			name="keywords"
+			content="bill splitting, split bills, split it, restaurant bill splitting, bar bill splitting, grocery bill splitting" />
+		<meta name="author" content="Darien Cepani" />
+		<meta name="robots" content="index, follow" />
+		<meta name="revisit-after" content="1 days" />
+		<meta name="copyright" content="SplitIt" />
+		<meta name="distribution" content="global" />
+		<meta name="rating" content="General" />
+		<meta name="classification" content="Business" />
+		<meta
+			name="abstract"
+			content="SplitIt is a free, easy-to-use web app for splitting bills at restaurants, bars, and for groceries. Split bills accurately, calculate totals, and share details easily." />
+		<meta name="topic" content="Business" />
+		<meta
+			name="summary"
+			content="SplitIt is a free, easy-to-use web app for splitting bills at restaurants, bars, and for groceries. Split bills accurately, calculate totals, and share details easily." />
+		<meta
+			name="twitter:title"
+			content="SplitIt - Easy Bill Splitting Web App" />
+		<meta
+			name="twitter:description"
+			content="SplitIt is a free, easy-to-use web app for splitting bills at restaurants, bars, and for groceries. Split bills accurately, calculate totals, and share details easily." />
+		<link
+			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+			rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=Montserrat:wght@400;700&display=swap"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				darkMode: "class",
+				theme: {
+					extend: {
+						colors: {
+							primary: "#8000f8",
+							secondary: "#5f5f5f",
+						},
+					},
+				},
+			};
+		</script>
+		<style>
+			@import url("https://fonts.googleapis.com/css?family=Unbounded:700|Montserrat:400");
+
+			body {
+				font-family: "Montserrat", sans-serif;
+				transition: background-color 200ms ease-in-out,
+					color 200ms ease-in-out;
+			}
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				font-family: "Unbounded", sans-serif;
+			}
+
+			header {
+				background-color: transparent;
+				transition: background-color 250ms ease-in-out;
+			}
+
+			header.scrolled {
+				background-color: #ffffff; /* or any color you prefer */
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			/* For dark mode support */
+			.dark header.scrolled {
+				background-color: rgb(31, 41, 55);
+			}
+
+			.fade-in {
+				opacity: 0;
+				transform: translateY(20px);
+				transition: opacity 0.5s, transform 0.5s;
+			}
+
+			.fade-in.visible {
+				opacity: 1;
+				transform: translateY(0);
+			}
+
+			.toggle-checkbox:checked {
+				right: 0;
+				border-color: #68d391;
+			}
+
+			.toggle-checkbox:checked + .toggle-label {
+				background-color: #68d391;
+			}
+
+			.hero-animation {
+				background-size: 400% 400%;
+				animation: gradient 15s ease infinite;
+			}
+
+			.section-100vh {
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.logo {
+				max-width: 150px;
+				height: auto;
+			}
+
+			.heroCard {
+				margin: 0 auto;
+				width: fit-content !important;
+				padding: 50px !important;
+				border-radius: 10px;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			:root {
+				--color1: 79, 70, 229;
+				--color2: 99, 102, 241;
+				--color3: 139, 92, 246;
+				--color4: 236, 72, 153;
+				--color5: 244, 63, 94;
+				--circle-size: 50%;
+				--blending: hard-light;
+			}
+
+			@keyframes moveInCircle {
+				0% {
+					transform: rotate(0deg);
+				}
+				50% {
+					transform: rotate(180deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes moveVertical {
+				0% {
+					transform: translateY(-50%);
+				}
+				50% {
+					transform: translateY(50%);
+				}
+				100% {
+					transform: translateY(-50%);
+				}
+			}
+			@keyframes moveHorizontal {
+				0% {
+					transform: translateX(-50%) translateY(-10%);
+				}
+				50% {
+					transform: translateX(50%) translateY(10%);
+				}
+				100% {
+					transform: translateX(-50%) translateY(-10%);
+				}
+			}
+			.gradient-bg {
+				width: 100%;
+				height: 100vh;
+				position: relative;
+				overflow: hidden;
+				z-index: -1 !important;
+				top: 0;
+				left: 0;
+			}
+			.gradient-bg .svgBlur {
+				display: none;
+			}
+			.gradient-bg .noiseBg {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: 1;
+				mix-blend-mode: soft-light;
+				opacity: 0.3;
+			}
+			.gradient-bg .gradients-container {
+				filter: url(#goo) blur(40px);
+				width: 100%;
+				height: 100%;
+			}
+			.gradient-bg .g1 {
+				position: absolute;
+				background: radial-gradient(
+						circle at center,
+						rgba(var(--color1), 0.8) 0,
+						rgba(var(--color1), 0) 50%
+					)
+					no-repeat;
+				mix-blend-mode: var(--blending);
+				width: var(--circle-size);
+				height: var(--circle-size);
+				top: calc(50% - var(--circle-size) / 2);
+				left: calc(50% - var(--circle-size) / 2);
+				transform-origin: center center;
+				animation: moveVertical 30s ease infinite;
+				opacity: 1;
+			}
+			.gradient-bg .g2 {
+				position: absolute;
+				background: radial-gradient(
+						circle at center,
+						rgba(var(--color2), 0.8) 0,
+						rgba(var(--color2), 0) 50%
+					)
+					no-repeat;
+				mix-blend-mode: var(--blending);
+				width: var(--circle-size);
+				height: var(--circle-size);
+				top: calc(50% - var(--circle-size) / 2);
+				left: calc(50% - var(--circle-size) / 2);
+				transform-origin: calc(50% - 400px);
+				animation: moveInCircle 20s reverse infinite;
+				opacity: 1;
+			}
+			.gradient-bg .g3 {
+				position: absolute;
+				background: radial-gradient(
+						circle at center,
+						rgba(var(--color3), 0.8) 0,
+						rgba(var(--color3), 0) 50%
+					)
+					no-repeat;
+				mix-blend-mode: var(--blending);
+				width: var(--circle-size);
+				height: var(--circle-size);
+				top: calc(50% - var(--circle-size) / 2 + 200px);
+				left: calc(50% - var(--circle-size) / 2 - 500px);
+				transform-origin: calc(50% + 400px);
+				animation: moveInCircle 40s linear infinite;
+				opacity: 1;
+			}
+			.gradient-bg .g4 {
+				position: absolute;
+				background: radial-gradient(
+						circle at center,
+						rgba(var(--color4), 0.8) 0,
+						rgba(var(--color4), 0) 50%
+					)
+					no-repeat;
+				mix-blend-mode: var(--blending);
+				width: var(--circle-size);
+				height: var(--circle-size);
+				top: calc(50% - var(--circle-size) / 2);
+				left: calc(50% - var(--circle-size) / 2);
+				transform-origin: calc(50% - 200px);
+				animation: moveHorizontal 40s ease infinite;
+				opacity: 0.7;
+			}
+			.gradient-bg .g5 {
+				position: absolute;
+				background: radial-gradient(
+						circle at center,
+						rgba(var(--color5), 0.8) 0,
+						rgba(var(--color5), 0) 50%
+					)
+					no-repeat;
+				mix-blend-mode: var(--blending);
+				width: calc(var(--circle-size) * 2);
+				height: calc(var(--circle-size) * 2);
+				top: calc(50% - var(--circle-size));
+				left: calc(50% - var(--circle-size));
+				transform-origin: calc(50% - 800px) calc(50% + 200px);
+				animation: moveInCircle 20s ease infinite;
+				opacity: 1;
+			}
+			.gradient-bg .interactive {
+				position: absolute;
+				background: radial-gradient(
+						circle at center,
+						rgba(var(--color-interactive), 0.8) 0,
+						rgba(var(--color-interactive), 0) 50%
+					)
+					no-repeat;
+				mix-blend-mode: var(--blending);
+				width: 100%;
+				height: 100%;
+				top: -50%;
+				left: -50%;
+				opacity: 0.7;
+			}
+		</style>
+	</head>
+	<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+		<header class="fixed w-full z-10 py-2" id="header">
+			<nav
+				class="container mx-auto px-6 py-3 flex justify-between items-center">
+				<a href="#" class="font-bold text-gray-800 dark:text-white">
+					<img
+						src="media/logo/logo.png"
+						alt="SplitIt Logo"
+						class="logo dark:hidden" />
+					<img
+						src="media/logo/logoDark.png"
+						alt="SplitIt Logo"
+						class="logo hidden dark:block" />
+				</a>
+
+				<div class="hidden md:flex items-center">
+					<a
+						href="#features"
+						class="mx-3 hover:text-gray-600 dark:hover:text-gray-300 transition duration-300"
+						>Features</a
+					>
+					<a
+						href="#how-it-works"
+						class="mx-3 hover:text-gray-600 dark:hover:text-gray-300 transition duration-300"
+						>How It Works</a
+					>
+					<a
+						href="#pricing"
+						class="mx-3 hover:text-gray-600 dark:hover:text-gray-300 transition duration-300"
+						>Pricing</a
+					>
+					<button
+						id="darkModeToggle"
+						class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-full transition-all">
+						<i class="fas fa-moon dark:hidden"></i>
+						<i class="fas fa-sun hidden dark:inline"></i>
+					</button>
+				</div>
+
+				<button id="mobileMenuBtn" class="md:hidden">
+					<i class="fas fa-bars text-2xl"></i>
+				</button>
+			</nav>
+		</header>
+
+		<div
+			id="mobileMenu"
+			class="fixed inset-y-0 right-0 w-50 bg-white dark:bg-gray-800 z-20 transform translate-x-full transition-transform duration-300 ease-in-out">
+			<div class="p-6">
+				<button id="closeMobileMenu" class="absolute top-4 right-4">
+					<i class="fas fa-times text-2xl"></i>
+				</button>
+				<nav class="mt-8">
+					<a
+						href="#features"
+						class="block py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						>Features</a
+					>
+					<a
+						href="#how-it-works"
+						class="block py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						>How It Works</a
+					>
+					<a
+						href="#pricing"
+						class="block py-2 hover:text-gray-600 dark:hover:text-gray-300"
+						>Pricing</a
+					>
+					<button
+						id="darkModeToggle"
+						class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-full transition-all">
+						<i class="fas fa-moon dark:hidden"></i>
+						<i class="fas fa-sun hidden dark:inline"></i>
+					</button>
+				</nav>
+			</div>
+		</div>
+
+		<main>
+			<section id="hero" class="hero-animation section-100vh text-white">
+				<div class="gradient-bg dark:bg-black">
+					<svg xmlns="http://www.w3.org/2000/svg" class="noiseBg">
+						<filter id="noiseFilterBg">
+							<feTurbulence
+								type="fractalNoise"
+								baseFrequency="1"
+								stitchTiles="stitch" />
+						</filter>
+
+						<rect
+							width="100%"
+							height="100%"
+							preserveAspectRatio="xMidYMid meet"
+							filter="url(#noiseFilterBg)" />
+					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" class="svgBlur">
+						<defs>
+							<filter id="goo">
+								<feGaussianBlur
+									in="SourceGraphic"
+									stdDeviation="15"
+									result="blur" />
+								<feColorMatrix
+									in="blur"
+									mode="matrix"
+									values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+									result="goo" />
+								<feBlend in="SourceGraphic" in2="goo" />
+							</filter>
+						</defs>
+					</svg>
+					<div class="gradients-container">
+						<div class="g1"></div>
+						<div class="g2"></div>
+						<div class="g3"></div>
+						<div class="g4"></div>
+						<div class="g5"></div>
+						<div class="interactive"></div>
+					</div>
+				</div>
+				<div class="container heroCard mx-auto text-center absolute">
+					<h1
+						class="text-5xl font-bold mb-6 fade-in text-gray-900 dark:text-white">
+						Split Bills Effortlessly with
+						<span class="">SplitIt</span>
+					</h1>
+					<p
+						class="text-xl mb-12 fade-in text-gray-900 dark:text-white">
+						The easiest way to split bills for restaurants, bars,
+						and groceries
+					</p>
+					<div class="flex justify-center flex-col lg:flex-row gap-2">
+						<a
+							href="#"
+							class="bg-primary w-auto py-3 px-8 rounded-full font-bold hover:bg-indigo-600 transition duration-300 fade-in"
+							>Try It Now - It's Free!</a
+						>
+						<a
+							href="#how-it-works"
+							class="bg-secondary text-white py-3 px-8 rounded-full font-bold hover:bg-indigo-600 transition duration-300 fade-in"
+							>How does it work?</a
+						>
+					</div>
+				</div>
+			</section>
+
+			<section
+				id="how-it-works"
+				class="section-100vh bg-gray-100 dark:bg-gray-900">
+				<div class="container mx-auto px-6">
+					<h2 class="text-4xl font-bold text-center mb-12 fade-in">
+						How It Works
+					</h2>
+					<div
+						class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
+						<div class="text-center fade-in">
+							<div
+								class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
+								<i class="fas fa-pencil-alt text-2xl"></i>
+							</div>
+							<h3 class="text-xl font-bold mb-2">
+								Enter Bill Details
+							</h3>
+							<p>
+								Input the bill items and assign them to
+								individuals
+							</p>
+						</div>
+						<div class="text-center fade-in">
+							<div
+								class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
+								<i class="fas fa-check-double text-2xl"></i>
+							</div>
+							<h3 class="text-xl font-bold mb-2">
+								Review and Adjust
+							</h3>
+							<p>
+								Double-check the details and make any necessary
+								adjustments
+							</p>
+						</div>
+						<div class="text-center fade-in">
+							<div
+								class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center mb-4 mx-auto">
+								<i class="fas fa-share-square text-2xl"></i>
+							</div>
+							<h3 class="text-xl font-bold mb-2">
+								Share or Download
+							</h3>
+							<p>
+								Share the results via link or download as a PDF
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section
+				id="features"
+				class="min-h-100vh section-100vh py-32 bg-white dark:bg-gray-800">
+				<div class="container mx-auto px-6">
+					<h2 class="text-4xl font-bold text-center mb-12 fade-in">
+						Features
+					</h2>
+					<div
+						class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+						<div
+							class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 fade-in hover:shadow-lg transition duration-300">
+							<i
+								class="fas fa-calculator text-4xl text-primary mb-4"></i>
+							<h3 class="text-2xl font-bold mb-4">
+								Accurate Splitting
+							</h3>
+							<p>
+								Split bills according to what each person
+								ordered, ensuring fairness and accuracy.
+							</p>
+						</div>
+						<div
+							class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 fade-in hover:shadow-lg transition duration-300">
+							<i
+								class="fas fa-bolt text-4xl text-primary mb-4"></i>
+							<h3 class="text-2xl font-bold mb-4">
+								Instant Calculations
+							</h3>
+							<p>
+								Automatically calculate the total amount each
+								person owes, saving you time and effort.
+							</p>
+						</div>
+						<div
+							class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 fade-in hover:shadow-lg transition duration-300">
+							<i
+								class="fas fa-file-pdf text-4xl text-primary mb-4"></i>
+							<h3 class="text-2xl font-bold mb-4">
+								PDF Download
+							</h3>
+							<p>
+								Generate and download a detailed PDF with tables
+								of clients and bill information.
+							</p>
+						</div>
+						<div
+							class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 fade-in hover:shadow-lg transition duration-300">
+							<i
+								class="fas fa-share-alt text-4xl text-primary mb-4"></i>
+							<h3 class="text-2xl font-bold mb-4">
+								Easy Sharing
+							</h3>
+							<p>
+								Share bill details via a link, allowing others
+								to view and edit the information.
+							</p>
+						</div>
+						<div
+							class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 fade-in hover:shadow-lg transition duration-300">
+							<i
+								class="fas fa-moon text-4xl text-primary mb-4"></i>
+							<h3 class="text-2xl font-bold mb-4">Dark Mode</h3>
+							<p>
+								Switch between light and dark modes for
+								comfortable use in any environment.
+							</p>
+						</div>
+						<div
+							class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 fade-in hover:shadow-lg transition duration-300">
+							<i
+								class="fas fa-mobile-alt text-4xl text-primary mb-4"></i>
+							<h3 class="text-2xl font-bold mb-4">
+								Mobile Friendly
+							</h3>
+							<p>
+								Fully responsive design ensures a great
+								experience on any device.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section
+				id="pricing"
+				class="section-100vh bg-white dark:bg-gray-900">
+				<div class="container mx-auto px-6">
+					<h2 class="text-4xl font-bold text-center mb-12 fade-in">
+						Pricing
+					</h2>
+
+					<div
+						class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 fade-in hover:shadow-lg transition duration-300">
+						<h3 class="text-3xl font-bold text-center mb-6">
+							Free for Now!
+						</h3>
+						<ul
+							class="mb-8 w-full flex justify-center items-center flex-col">
+							<li class="flex items-center mb-4">
+								<i class="fas fa-check text-green-500 mr-2"></i>
+								All features included
+							</li>
+							<li class="flex items-center mb-4">
+								<i class="fas fa-check text-green-500 mr-2"></i>
+								No credit card required
+							</li>
+							<li class="flex items-center">
+								<i class="fas fa-check text-green-500 mr-2"></i>
+								Use as much as you want
+							</li>
+						</ul>
+						<p class="text-center text-gray-600 mb-6">
+							We're currently offering SplitIt for free while we
+							develop more features. In the future, we plan to
+							introduce paid plans with additional functionality.
+						</p>
+						<a
+							href="#"
+							class="block w-full bg-primary text-white text-center py-3 rounded-lg font-bold hover:bg-indigo-600 transition duration-300"
+							>Start Splitting Bills Now</a
+						>
+					</div>
+				</div>
+			</section>
+
+			<section
+				id="cta"
+				class="py-20 bg-gradient-to-r from-primary to-indigo-600 text-white">
+				<div class="container mx-auto px-6 text-center">
+					<h2 class="text-4xl font-bold mb-8 fade-in">
+						Ready to Simplify Your Bill Splitting?
+					</h2>
+					<p class="text-xl mb-12 fade-in">
+						Join thousands of users who are already enjoying
+						stress-free bill splitting with SplitIt.
+					</p>
+					<a
+						href="#"
+						class="bg-white text-primary py-3 px-8 rounded-full font-bold hover:bg-indigo-600 hover:text-white transition duration-300 fade-in"
+						>Start Splittin'!</a
+					>
+				</div>
+			</section>
+		</main>
+
+		<footer class="bg-gray-800 text-white py-8">
+			<div class="container mx-auto px-6">
+				<div class="flex flex-wrap justify-between items-center">
+					<div class="w-full md:w-1/3 text-center md:text-left">
+						<h4 class="text-lg font-bold mb-4">SplitIt</h4>
+						<p>Simplifying bill splitting for everyone.</p>
+					</div>
+					<div class="w-full md:w-1/3 text-center mt-6 md:mt-0">
+						<h4 class="text-lg font-bold mb-4">Quick Links</h4>
+						<ul>
+							<li>
+								<a href="#features" class="hover:text-gray-300"
+									>Features</a
+								>
+							</li>
+							<li>
+								<a
+									href="#how-it-works"
+									class="hover:text-gray-300"
+									>How It Works</a
+								>
+							</li>
+							<li>
+								<a href="#pricing" class="hover:text-gray-300"
+									>Pricing</a
+								>
+							</li>
+						</ul>
+					</div>
+					<div
+						class="w-full md:w-1/3 text-center md:text-right mt-6 md:mt-0">
+						<h4 class="text-lg font-bold mb-4">Contact Us</h4>
+						<p>support@splitit.com</p>
+					</div>
+				</div>
+				<div class="border-t border-gray-700 mt-8 pt-8 text-center">
+					<p>&copy; 2024 SplitIt. All rights reserved.</p>
+				</div>
+			</div>
+		</footer>
+
+		<script>
+			// Smooth scrolling for anchor links
+			document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+				anchor.addEventListener("click", function (e) {
+					e.preventDefault();
+					document
+						.querySelector(this.getAttribute("href"))
+						.scrollIntoView({
+							behavior: "smooth",
+						});
+				});
+			});
+
+			// Fade-in animation
+			const fadeElems = document.querySelectorAll(".fade-in");
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add("visible");
+						}
+					});
+				},
+				{ threshold: 0.1 }
+			);
+
+			fadeElems.forEach((elem) => observer.observe(elem));
+
+			// Dark mode toggle
+			const darkModeToggle = document.getElementById("darkModeToggle");
+			darkModeToggle.addEventListener("click", () => {
+				document.documentElement.classList.toggle("dark");
+				saveThemePreference();
+			});
+
+			// Mobile menu
+			const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+			const closeMobileMenu = document.getElementById("closeMobileMenu");
+			const mobileMenu = document.getElementById("mobileMenu");
+
+			mobileMenuBtn.addEventListener("click", () => {
+				mobileMenu.classList.remove("translate-x-full");
+			});
+
+			closeMobileMenu.addEventListener("click", () => {
+				mobileMenu.classList.add("translate-x-full");
+			});
+
+			// Save theme preference
+			function saveThemePreference() {
+				const isDarkMode =
+					document.documentElement.classList.contains("dark");
+				localStorage.setItem("darkMode", isDarkMode);
+			}
+
+			// Load theme preference
+			function loadThemePreference() {
+				const isDarkMode = localStorage.getItem("darkMode") === "true";
+				if (isDarkMode) {
+					document.documentElement.classList.add("dark");
+				}
+			}
+
+			// Call loadThemePreference on page load
+			loadThemePreference();
+
+			document.addEventListener("DOMContentLoaded", () => {
+				var navbar = document.getElementById("header");
+
+				window.addEventListener("scroll", function () {
+					if (window.scrollY > 50) {
+						navbar.classList.add("scrolled");
+					} else {
+						navbar.classList.remove("scrolled");
+					}
+				});
+				const interBubble = document.querySelector(".interactive");
+				let curX = 0;
+				let curY = 0;
+				let tgX = 0;
+				let tgY = 0;
+
+				const move = () => {
+					curX += (tgX - curX) / 20;
+					curY += (tgY - curY) / 20;
+					interBubble.style.transform = `translate(${Math.round(
+						curX
+					)}px, ${Math.round(curY)}px)`;
+					requestAnimationFrame(move);
+				};
+
+				window.addEventListener("mousemove", (event) => {
+					tgX = event.clientX;
+					tgY = event.clientY;
+				});
+
+				move();
+			});
+		</script>
+	</body>
+</html>
